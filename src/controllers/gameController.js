@@ -1,4 +1,8 @@
-const { createGame, findGames, findGameById } = require("../services/gameService");
+const {
+  createGame,
+  findGames,
+  findGameById,
+} = require("../services/gameService");
 
 const postGame = async (req, res) => {
   try {
@@ -22,8 +26,8 @@ const getGames = async (req, res) => {
 
 const getGameById = async (req, res) => {
   try {
-    const games = await findGameById(req.params.id);
-    res.status(201).json(games);
+    const game = await findGameById(req.params.id);
+    res.status(201).json(game);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

@@ -1,11 +1,8 @@
-const { Client } = require("pg");
-const connectionString = process.env.DATABASE_URL;
+const { getClient } = require("./utils/db");
 
 const createGame = async (gameData) => {
-  const client = new Client({ connectionString });
+  const client = await getClient();
   try {
-    await client.connect();
-
     const result = await client.query({
       text: 'INSERT INTO games(name, image, "stockTotal", "pricePerDay") VALUES($1, $2, $3, $4) RETURNING *',
       values: [
@@ -26,9 +23,8 @@ const createGame = async (gameData) => {
 };
 
 const findGames = async () => {
-  const client = new Client({ connectionString });
+  const client = await getClient();
   try {
-    await client.connect();
     const result = await client.query("SELECT * FROM games");
     return result.rows;
   } catch (err) {
@@ -38,14 +34,14 @@ const findGames = async () => {
     await client.end();
   }
 };
+
 const findGameById = async (id) => {
-  const client = new Client({ connectionString });
+  const client = await getClient();
   try {
-    await client.connect();
     const result = await client.query("SELECT * FROM games WHERE id=$1", [id]);
-    return result.rows;
+    return result.rows[0];
   } catch (err) {
-    console.error("Error getting games", err);
+    console.error("Error getting game", err);
     throw err;
   } finally {
     await client.end();

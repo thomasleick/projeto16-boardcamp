@@ -1,33 +1,35 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const corsOptions = require('./configs/corsOptions')
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const corsOptions = require("./configs/corsOptions");
 //const cookieParser = require('cookie-parser')
-const credentials = require('./middlewares/credentials')
+const credentials = require("./middlewares/credentials");
 
-const gameRouter = require('./routes/game');
+// import Routes
+const gamesRouter = require("./routes/games");
+const customersRouter = require("./routes/customers");
 
-const app = express()
+const app = express();
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
-app.use(credentials)
+app.use(credentials);
 
 // Cross Origin Resource Sharing
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 // built-in middleware for json
-app.use(express.json())
+app.use(express.json());
 
 // middleware for cookies
 //app.use(cookieParser())
 
 const { Client } = require("pg");
-const DATABASE_URL = process.env.DATABASE_URL
-const PORT = process.env.PORT || 5000
+const DATABASE_URL = process.env.DATABASE_URL;
+const PORT = process.env.PORT || 5000;
 const client = new Client({
   connectionString: DATABASE_URL,
 });
@@ -47,7 +49,8 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 // Routes
-app.use('/games', gameRouter)
+app.use("/games", gamesRouter);
+app.use("/customers", customersRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
