@@ -24,7 +24,7 @@ const postCustomer = async (req, res) => {
 const getCustomers = async (req, res) => {
   try {
     const customers = await findCustomers();
-    res.status(201).json(customers);
+    res.status(200).json(customers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -33,7 +33,7 @@ const getCustomers = async (req, res) => {
 const getCustomerById = async (req, res) => {
   try {
     const customer = await findCustomerById(req.params.id);
-    res.status(201).json(customer);
+    res.status(200).json(customer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -55,7 +55,7 @@ const putCustomer = async (req, res) => {
       }
 
     const customer = await editCustomer(foundCustomerId.id, req.body);
-    res.status(201).json(customer);
+    res.status(200).json(customer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

@@ -17,7 +17,7 @@ const postGame = async (req, res) => {
 const getGames = async (req, res) => {
   try {
     const games = await findGames();
-    res.status(201).json(games);
+    res.status(200).json(games);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -27,7 +27,7 @@ const getGames = async (req, res) => {
 const getGameById = async (req, res) => {
   try {
     const game = await findGameById(req.params.id);
-    res.status(201).json(game);
+    res.status(200).json(game);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
