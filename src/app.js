@@ -8,6 +8,7 @@ const credentials = require("./middlewares/credentials");
 // import Routes
 const gamesRouter = require("./routes/games");
 const customersRouter = require("./routes/customers");
+const rentsRouter = require("./routes/rents");
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/games", gamesRouter);
 app.use("/customers", customersRouter);
+app.use("/rentals", rentsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
