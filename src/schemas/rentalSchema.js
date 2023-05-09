@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const rentSchema = Joi.object({
+const rentalSchema = Joi.object({
     customerId: Joi.number().integer().min(1).required(),
     gameId: Joi.number().integer().min(1).required(),
     rentDate: Joi.date().required(),
@@ -10,4 +10,4 @@ const rentSchema = Joi.object({
     delayFee: Joi.number().integer().allow(null),
 });
 
-module.exports = rentSchema;
+module.exports = rentalSchema;

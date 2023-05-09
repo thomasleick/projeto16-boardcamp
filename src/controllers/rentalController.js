@@ -1,13 +1,13 @@
 const {
-  createRent,
-  findRents,
-  findRentById,
-} = require("../services/rentService");
+  createRental,
+  findRentals,
+  findRentalById,
+} = require("../services/rentalService");
 
 const { findGameById } = require("../services/gameService");
 const { findCustomerById } = require("../services/customerService");
 
-const postRent = async (req, res) => {
+const postRental = async (req, res) => {
   try {
     const gameId = req.body.gameId;
     const game = await findGameById(gameId);
@@ -21,7 +21,7 @@ const postRent = async (req, res) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    const rent = await createRent(req.body);
+    const rent = await createRental(req.body);
     res.status(201).json(rent);
   } catch (error) {
     console.error(error);
@@ -29,15 +29,15 @@ const postRent = async (req, res) => {
   }
 };
 
-const getRents = async (req, res) => {};
-const getRentById = async (req, res) => {};
-const putRent = async (req, res) => {};
-const deleteRent = async (req, res) => {};
+const getRentals = async (req, res) => {};
+const getRentalById = async (req, res) => {};
+const putRental = async (req, res) => {};
+const deleteRental = async (req, res) => {};
 
 module.exports = {
-  postRent,
-  getRents,
-  getRentById,
-  putRent,
-  deleteRent,
+  postRental,
+  getRentals,
+  getRentalById,
+  putRental,
+  deleteRental,
 };
