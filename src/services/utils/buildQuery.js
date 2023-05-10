@@ -34,9 +34,6 @@ const buildQuery = (tableName, params) => {
   }
 
   if (offset) {
-    if (i === 1) {
-      query += " WHERE";
-    }
     query += ` OFFSET $${i}`;
     values.push(parseInt(offset, 10));
     i++;
