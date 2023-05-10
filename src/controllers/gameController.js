@@ -2,10 +2,15 @@ const {
   createGame,
   findGames,
   findGameById,
+  findGameByName,
 } = require("../services/gameService");
 
 const postGame = async (req, res) => {
   try {
+    const foundGame = await findGameByName(req.body.name)
+    if (foundGame) {
+      return res.status(409).json({ message: "Already have a game with this name" })
+    }
     const game = await createGame(req.body);
     res.status(201).json(game);
   } catch (error) {

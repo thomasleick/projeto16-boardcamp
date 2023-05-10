@@ -47,9 +47,23 @@ const findGameById = async (id) => {
     await client.end();
   }
 };
+const findGameByName = async (name) => {
+  const client = await getClient();
+  try {
+    const result = await client.query("SELECT * FROM games WHERE name=$1", [name]);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error getting game", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
+
 
 module.exports = {
   createGame,
   findGames,
   findGameById,
+  findGameByName,
 };
