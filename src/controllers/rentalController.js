@@ -64,7 +64,7 @@ const getRentals = async (req, res) => {
         const customerId = rental.customerId;
         const customer = await findCustomerById(customerId);
 
-        return JSON.stringify({
+        return {
           id: rental.id,
           customerId: rental.customerId,
           gameId: rental.gameId,
@@ -75,10 +75,9 @@ const getRentals = async (req, res) => {
           delayFee: rental.delayFee,
           customer,
           game,
-        });
+        };
       })
     );
-
     res.status(200).json(rentalsWithGameAndCustomer);
   } catch (error) {
     console.error(error);
@@ -104,7 +103,10 @@ const returnRental = async (req, res) => {
     const today = new Date();
     const diff = Math.abs(today.getTime() - date1Obj.getTime());
     const days = Math.round(diff / oneDay);
-    const delayFee = Math.max((days - rental.daysRented -1) * game.pricePerDay, 0);
+    const delayFee = Math.max(
+      (days - rental.daysRented - 1) * game.pricePerDay,
+      0
+    );
 
     await returnRentalWithId(rentalId, today, delayFee);
     return res.sendStatus(200);
