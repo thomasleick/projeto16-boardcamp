@@ -29,10 +29,10 @@ const createRental = async (rentData) => {
 const findRentals = async () => {
   const client = await getClient();
   try {
-    const result = await client.query("SELECT * FROM games");
+    const result = await client.query("SELECT * FROM rentals");
     return result.rows;
   } catch (err) {
-    console.error("Error getting games", err);
+    console.error("Error getting rentals", err);
     throw err;
   } finally {
     await client.end();
