@@ -1,4 +1,5 @@
 const { getClient } = require("./utils/db");
+const { buildQuery } = require("./utils/buildQuery");
 
 const createGame = async (gameData) => {
   const client = await getClient();
@@ -22,10 +23,12 @@ const createGame = async (gameData) => {
   }
 };
 
-const findGames = async () => {
+const findGames = async (params) => {
+  const { query, values } = buildQuery("games", params);
   const client = await getClient();
+
   try {
-    const result = await client.query("SELECT * FROM games");
+    const result = await client.query(query, values);
     return result.rows;
   } catch (err) {
     console.error("Error getting games", err);
@@ -50,7 +53,9 @@ const findGameById = async (id) => {
 const findGameByName = async (name) => {
   const client = await getClient();
   try {
-    const result = await client.query("SELECT * FROM games WHERE name=$1", [name]);
+    const result = await client.query("SELECT * FROM games WHERE name=$1", [
+      name,
+    ]);
     return result.rows[0];
   } catch (err) {
     console.error("Error getting game", err);
@@ -59,7 +64,6 @@ const findGameByName = async (name) => {
     await client.end();
   }
 };
-
 
 module.exports = {
   createGame,

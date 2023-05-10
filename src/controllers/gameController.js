@@ -21,7 +21,7 @@ const postGame = async (req, res) => {
 
 const getGames = async (req, res) => {
   try {
-    const games = await findGames();
+    const games = await findGames(req?.query);
     res.status(200).json(games);
   } catch (error) {
     console.error(error);
