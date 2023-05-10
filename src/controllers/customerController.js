@@ -23,7 +23,7 @@ const postCustomer = async (req, res) => {
 };
 const getCustomers = async (req, res) => {
   try {
-    const { cpf, order, offset, limit } = req?.query
+    const { cpf, order, offset, limit } = req?.query;
     const customers = await findCustomers({ cpf, order, offset, limit });
     res.status(200).json(customers);
   } catch (error) {
@@ -34,6 +34,9 @@ const getCustomers = async (req, res) => {
 const getCustomerById = async (req, res) => {
   try {
     const customer = await findCustomerById(req.params.id);
+    if (!customer) {
+      return res.sendStatus(404);
+    }
     res.status(200).json(customer);
   } catch (error) {
     console.error(error);
@@ -44,16 +47,14 @@ const putCustomer = async (req, res) => {
   try {
     const foundCustomerId = await findCustomerById(req.params.id);
     if (!foundCustomerId) {
-      return res
-        .status(404)
-        .json({ message: "Customer not found" });
+      return res.status(404).json({ message: "Customer not found" });
     }
     const foundCustomerCpf = await findCustomerByCpf(req.body.cpf);
     if (foundCustomerCpf && foundCustomerCpf.id !== parseInt(req.params.id)) {
-        return res
-          .status(409)
-          .json({ message: "Customer already registered with this CPF" });
-      }
+      return res
+        .status(409)
+        .json({ message: "Customer already registered with this CPF" });
+    }
 
     const customer = await editCustomer(foundCustomerId.id, req.body);
     res.status(200).json(customer);

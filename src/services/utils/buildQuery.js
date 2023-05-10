@@ -1,5 +1,5 @@
 const buildQuery = (tableName, params) => {
-  const { name, cpf, offset, limit, order } = params;
+  const { name, cpf, customerId, gameId, offset, limit, order } = params;
   let query = `SELECT * FROM ${tableName}`;
   const values = [];
   let i = 1;

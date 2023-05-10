@@ -48,7 +48,14 @@ const postRental = async (req, res) => {
 
 const getRentals = async (req, res) => {
   try {
-    const rentals = await findRentals();
+    const { customerId, gameId, order, offset, limit } = req?.query;
+    const rentals = await findRentals({
+      customerId,
+      gameId,
+      order,
+      offset,
+      limit,
+    });
     const rentalsWithGameAndCustomer = await Promise.all(
       rentals.map(async (rental) => {
         const gameId = rental.gameId;
@@ -57,7 +64,7 @@ const getRentals = async (req, res) => {
         const customerId = rental.customerId;
         const customer = await findCustomerById(customerId);
 
-        return {
+        return JSON.stringify({
           id: rental.id,
           customerId: rental.customerId,
           gameId: rental.gameId,
@@ -68,7 +75,7 @@ const getRentals = async (req, res) => {
           delayFee: rental.delayFee,
           customer,
           game,
-        };
+        });
       })
     );
 
@@ -109,13 +116,13 @@ const returnRental = async (req, res) => {
 const deleteRental = async (req, res) => {
   try {
     const rental = await findRentalById(req.params.id);
-    if(!rental) {
-      return res.status(404).json({ message: "Rental not found" })
+    if (!rental) {
+      return res.status(404).json({ message: "Rental not found" });
     }
-    if(!rental.returnDate) {
-      return res.status(400).json({ message: "Rental not returned" })
+    if (!rental.returnDate) {
+      return res.status(400).json({ message: "Rental not returned" });
     }
-    await deleteRentalWithId(req.params.id)
+    await deleteRentalWithId(req.params.id);
     res.status(200).json({ message: "Rental deleted" });
   } catch (error) {
     console.error(error);
