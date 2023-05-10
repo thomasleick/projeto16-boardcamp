@@ -1,19 +1,19 @@
 const { getClient } = require("./utils/db");
 
-const createRental = async (rentData) => {
+const createRental = async (rentalData) => {
   const client = await getClient();
 
   try {
     const result = await client.query({
       text: 'INSERT INTO rentals("customerId", "gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee") VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
       values: [
-        rentData.customerId,
-        rentData.gameId,
-        rentData.rentDate,
-        rentData.daysRented,
-        rentData.returnDate,
-        rentData.originalPrice,
-        rentData.delayFee,
+        rentalData.customerId,
+        rentalData.gameId,
+        rentalData.rentDate,
+        rentalData.daysRented,
+        rentalData.returnDate,
+        rentalData.originalPrice,
+        rentalData.delayFee,
       ],
     });
 
@@ -39,13 +39,13 @@ const findRentals = async () => {
   }
 };
 
-const findRentalById = async (id) => {
+const findRentalsByGameId = async (id) => {
   const client = await getClient();
   try {
-    const result = await client.query("SELECT * FROM games WHERE id=$1", [id]);
-    return result.rows[0];
+    const result = await client.query('SELECT * FROM rentals WHERE "gameId"=$1', [id]);
+    return result.rows;
   } catch (err) {
-    console.error("Error getting game", err);
+    console.error("Error getting rental", err);
     throw err;
   } finally {
     await client.end();
@@ -55,5 +55,5 @@ const findRentalById = async (id) => {
 module.exports = {
   createRental,
   findRentals,
-  findRentalById,
+  findRentalsByGameId,
 };

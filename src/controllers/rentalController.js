@@ -1,7 +1,7 @@
 const {
   createRental,
   findRentals,
-  findRentalById,
+  findRentalsByGameId,
 } = require("../services/rentalService");
 
 const { findGameById } = require("../services/gameService");
@@ -21,7 +21,19 @@ const postRental = async (req, res) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    const rent = await createRental(req.body);
+    const rentalsOfGameId = await findRentalsByGameId(req.body.gameId)
+    const rentalsOfGameIdNotReturned = rentalsOfGameId.filter(rental => rental.returnDate === null)
+    const gamesNotReturned = rentalsOfGameIdNotReturned.length
+    if (game.stockTotal <= gamesNotReturned) {
+      return res.status(400).json({ message: "Game not in stock" })
+    }
+    const rentalData = {
+      ...req.body,
+      rentDate: new Date(),
+      originalPrice: req.body.daysRented * game.pricePerDay,
+    }
+    
+    const rent = await createRental(rentalData);
     res.status(201).json(rent);
   } catch (error) {
     console.error(error);
@@ -61,14 +73,31 @@ const getRentals = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const getRentalById = async (req, res) => {};
+const returnRental = async (req, res) => {
+  try {
+    const rentalId = req.params.id;
+    const rental = await findRentalById(rentalId);
+
+    if (!rental) {
+      return res.status(404).json({ message: "Rental not found" });
+    }
+    console.log(rental)
+    if (rental.returnDate) {
+      return res.status(400).json({ message: "Rental already returned" });
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 const putRental = async (req, res) => {};
 const deleteRental = async (req, res) => {};
 
 module.exports = {
   postRental,
   getRentals,
-  getRentalById,
+  returnRental,
   putRental,
   deleteRental,
 };
