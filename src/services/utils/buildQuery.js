@@ -14,6 +14,20 @@ const buildQuery = (tableName, params) => {
     values.push(`%${cpf}%`);
     i++;
   }
+  if (customerId) {
+    query += ` WHERE "customerId" = $${i}`;
+    values.push(parseInt(customerId, 10));
+    i++;
+  }
+
+  if (gameId) {
+    if (i === 1) {
+      query += " WHERE";
+    }
+    query += ` "gameId" = $${i}`;
+    values.push(parseInt(gameId, 10));
+    i++;
+  }
 
   if (order) {
     query += ` ORDER BY ${order}`;
@@ -33,6 +47,8 @@ const buildQuery = (tableName, params) => {
     values.push(parseInt(limit, 10));
   }
 
+  console.log(query)
+  console.log(values)
   return {
     query,
     values,

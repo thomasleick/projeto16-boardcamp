@@ -1,4 +1,5 @@
 const { getClient } = require("./utils/db");
+const { buildQuery } = require("./utils/buildQuery");
 
 const createRental = async (rentalData) => {
   const client = await getClient();
@@ -26,10 +27,11 @@ const createRental = async (rentalData) => {
   }
 };
 
-const findRentals = async () => {
+const findRentals = async (params) => {
+  const { query, values } = buildQuery("rentals", params);
   const client = await getClient();
   try {
-    const result = await client.query("SELECT * FROM rentals");
+    const result = await client.query(query, values);
     return result.rows;
   } catch (err) {
     console.error("Error getting rentals", err);
