@@ -1,5 +1,5 @@
 const buildQuery = (tableName, params) => {
-  const { name, offset, limit, order } = params;
+  const { name, cpf, offset, limit, order } = params;
   let query = `SELECT * FROM ${tableName}`;
   const values = [];
   let i = 1;
@@ -7,6 +7,11 @@ const buildQuery = (tableName, params) => {
   if (name) {
     query += ` WHERE name ILIKE $${i}`;
     values.push(`%${name}%`);
+    i++;
+  }
+  if (cpf) {
+    query += ` WHERE cpf ILIKE $${i}`;
+    values.push(`%${cpf}%`);
     i++;
   }
 

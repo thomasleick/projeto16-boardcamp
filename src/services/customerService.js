@@ -1,4 +1,5 @@
 const { getClient } = require("./utils/db");
+const { buildQuery } = require("./utils/buildQuery");
 
 const createCustomer = async (customerData) => {
   const client = await getClient();
@@ -22,10 +23,12 @@ const createCustomer = async (customerData) => {
   }
 };
 
-const findCustomers = async () => {
+const findCustomers = async (params) => {
+  const { query, values } = buildQuery("customers", params);
   const client = await getClient();
+
   try {
-    const result = await client.query("SELECT * FROM customers");
+    const result = await client.query(query, values);
     return result.rows;
   } catch (err) {
     console.error("Error getting customers", err);
