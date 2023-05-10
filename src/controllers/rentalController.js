@@ -104,7 +104,7 @@ const returnRental = async (req, res) => {
     const today = new Date();
     const diff = Math.abs(today.getTime() - date1Obj.getTime());
     const days = Math.round(diff / oneDay);
-    const delayFee = (days - rental.daysRented) * game.pricePerDay;
+    const delayFee = Math.max((days - rental.daysRented -1) * game.pricePerDay, 0);
 
     await returnRentalWithId(rentalId, today, delayFee);
     return res.sendStatus(200);
