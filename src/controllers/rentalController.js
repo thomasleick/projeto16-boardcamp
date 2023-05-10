@@ -73,8 +73,8 @@ const getRentals = async (req, res) => {
           returnDate: rental.returnDate,
           originalPrice: rental.originalPrice,
           delayFee: rental.delayFee,
-          customer,
-          game,
+          customer: { id: customer.id, name: customer.name },
+          game : { id: game.id, name: game.name },
         };
       })
     );
