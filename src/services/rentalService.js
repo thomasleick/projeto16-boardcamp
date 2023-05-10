@@ -39,10 +39,28 @@ const findRentals = async () => {
   }
 };
 
+const findRentalById = async (id) => {
+  const client = await getClient();
+  try {
+    const result = await client.query("SELECT * FROM rentals WHERE id=$1", [
+      id,
+    ]);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error getting rental", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
+
 const findRentalsByGameId = async (id) => {
   const client = await getClient();
   try {
-    const result = await client.query('SELECT * FROM rentals WHERE "gameId"=$1', [id]);
+    const result = await client.query(
+      'SELECT * FROM rentals WHERE "gameId"=$1',
+      [id]
+    );
     return result.rows;
   } catch (err) {
     console.error("Error getting rental", err);
@@ -52,8 +70,39 @@ const findRentalsByGameId = async (id) => {
   }
 };
 
+const returnRentalWithId = async (id, returnDate, delayFee) => {
+  const client = await getClient();
+  try {
+    const result = await client.query(
+      'UPDATE rentals SET "returnDate"=$1, "delayFee"=$2 WHERE id=$3 RETURNING *',
+      [returnDate, delayFee, id]
+    );
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error returning rental", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
+
+const deleteRentalWithId = async (id) => {
+  const client = await getClient();
+  try {
+    await client.query('DELETE FROM rentals WHERE id=$1', [id]);
+  } catch (err) {
+    console.error("Error deleting rental", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
+
 module.exports = {
   createRental,
   findRentals,
+  findRentalById,
   findRentalsByGameId,
+  returnRentalWithId,
+  deleteRentalWithId,
 };

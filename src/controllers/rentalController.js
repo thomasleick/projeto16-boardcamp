@@ -1,7 +1,10 @@
 const {
   createRental,
   findRentals,
+  findRentalById,
   findRentalsByGameId,
+  returnRentalWithId,
+  deleteRentalWithId,
 } = require("../services/rentalService");
 
 const { findGameById } = require("../services/gameService");
@@ -21,18 +24,20 @@ const postRental = async (req, res) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    const rentalsOfGameId = await findRentalsByGameId(req.body.gameId)
-    const rentalsOfGameIdNotReturned = rentalsOfGameId.filter(rental => rental.returnDate === null)
-    const gamesNotReturned = rentalsOfGameIdNotReturned.length
+    const rentalsOfGameId = await findRentalsByGameId(req.body.gameId);
+    const rentalsOfGameIdNotReturned = rentalsOfGameId.filter(
+      (rental) => rental.returnDate === null
+    );
+    const gamesNotReturned = rentalsOfGameIdNotReturned.length;
     if (game.stockTotal <= gamesNotReturned) {
-      return res.status(400).json({ message: "Game not in stock" })
+      return res.status(400).json({ message: "Game not in stock" });
     }
     const rentalData = {
       ...req.body,
       rentDate: new Date(),
       originalPrice: req.body.daysRented * game.pricePerDay,
-    }
-    
+    };
+
     const rent = await createRental(rentalData);
     res.status(201).json(rent);
   } catch (error) {
@@ -81,23 +86,46 @@ const returnRental = async (req, res) => {
     if (!rental) {
       return res.status(404).json({ message: "Rental not found" });
     }
-    console.log(rental)
     if (rental.returnDate) {
       return res.status(400).json({ message: "Rental already returned" });
     }
 
+    const game = await findGameById(rental.gameId);
+
+    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
+    const date1Obj = rental.rentDate;
+    const today = new Date();
+    const diff = Math.abs(today.getTime() - date1Obj.getTime());
+    const days = Math.round(diff / oneDay);
+    const delayFee = (days - rental.daysRented) * game.pricePerDay;
+
+    await returnRentalWithId(rentalId, today, delayFee);
+    return res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const putRental = async (req, res) => {};
-const deleteRental = async (req, res) => {};
+const deleteRental = async (req, res) => {
+  try {
+    const rental = await findRentalById(req.params.id);
+    if(!rental) {
+      return res.status(404).json({ message: "Rental not found" })
+    }
+    if(!rental.returnDate) {
+      return res.status(400).json({ message: "Rental not returned" })
+    }
+    await deleteRentalWithId(req.params.id)
+    res.status(200).json({ message: "Rental deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   postRental,
   getRentals,
   returnRental,
-  putRental,
   deleteRental,
 };

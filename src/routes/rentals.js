@@ -7,9 +7,6 @@ const validateIdAsParams = require("../middlewares/validateParams");
 router.post("/", validateRent, rentalController.postRental);
 router.get("/", rentalController.getRentals);
 router.post("/:id/return", validateIdAsParams, rentalController.returnRental);
-
-
-router.put("/:id", validateIdAsParams, validateRent, rentalController.putRental);
 router.delete("/:id", validateIdAsParams, rentalController.deleteRental);
 
 module.exports = router;
