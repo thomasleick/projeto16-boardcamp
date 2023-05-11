@@ -48,7 +48,7 @@ const postRental = async (req, res) => {
 
 const getRentals = async (req, res) => {
   try {
-    const { customerId, gameId, order, offset, limit, desc } = req?.query;
+    const { customerId, gameId, order, offset, limit, desc, status, startDate } = req?.query;
     const rentals = await findRentals({
       customerId,
       gameId,
@@ -56,6 +56,8 @@ const getRentals = async (req, res) => {
       offset,
       limit,
       desc,
+      status,
+      startDate,
     });
     const rentalsWithGameAndCustomer = await Promise.all(
       rentals.map(async (rental) => {
