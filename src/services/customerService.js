@@ -41,7 +41,9 @@ const findCustomers = async (params) => {
 const findCustomerById = async (id) => {
   const client = await getClient();
   try {
-    const result = await client.query("SELECT * FROM customers WHERE id=$1", [id]);
+    const result = await client.query("SELECT * FROM customers WHERE id=$1", [
+      id,
+    ]);
     return result.rows[0];
   } catch (err) {
     console.error("Error getting customer", err);
@@ -51,45 +53,47 @@ const findCustomerById = async (id) => {
   }
 };
 const findCustomerByCpf = async (id) => {
-    const client = await getClient();
-    try {
-      const result = await client.query("SELECT * FROM customers WHERE cpf=$1", [id]);
-      return result.rows[0];
-    } catch (err) {
-      console.error("Error getting customer", err);
-      throw err;
-    } finally {
-      await client.end();
-    }
-  };
+  const client = await getClient();
+  try {
+    const result = await client.query("SELECT * FROM customers WHERE cpf=$1", [
+      id,
+    ]);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error getting customer", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
 
-  const editCustomer = async (customerId, newData) => {
-    const client = await getClient();
-    try {
-      const result = await client.query({
-        text: "UPDATE customers SET name=$1, phone=$2, cpf=$3, birthday=$4 WHERE id=$5 RETURNING *",
-        values: [
-          newData.name,
-          newData.phone,
-          newData.cpf,
-          newData.birthday,
-          customerId,
-        ],
-      });
-  
-      return result.rows[0];
-    } catch (err) {
-      console.error("Error updating customer", err);
-      throw err;
-    } finally {
-      await client.end();
-    }
-  };
+const editCustomer = async (customerId, newData) => {
+  const client = await getClient();
+  try {
+    const result = await client.query({
+      text: "UPDATE customers SET name=$1, phone=$2, cpf=$3, birthday=$4 WHERE id=$5 RETURNING *",
+      values: [
+        newData.name,
+        newData.phone,
+        newData.cpf,
+        newData.birthday,
+        customerId,
+      ],
+    });
+
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error updating customer", err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+};
 
 module.exports = {
   createCustomer,
   findCustomers,
   findCustomerById,
   findCustomerByCpf,
-  editCustomer
+  editCustomer,
 };

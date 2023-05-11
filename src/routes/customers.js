@@ -8,6 +8,11 @@ const validateQuery = require("../middlewares/validateQuery");
 router.post("/", validateCustomer, customerController.postCustomer);
 router.get("/", validateQuery, customerController.getCustomers);
 router.get("/:id", validateIdAsParams, customerController.getCustomerById);
-router.put("/:id", validateIdAsParams, validateCustomer, customerController.putCustomer)
+router.put(
+  "/:id",
+  validateIdAsParams,
+  validateCustomer,
+  customerController.putCustomer
+);
 
 module.exports = router;

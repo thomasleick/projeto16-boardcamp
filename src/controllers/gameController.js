@@ -7,9 +7,11 @@ const {
 
 const postGame = async (req, res) => {
   try {
-    const foundGame = await findGameByName(req.body.name)
+    const foundGame = await findGameByName(req.body.name);
     if (foundGame) {
-      return res.status(409).json({ message: "Already have a game with this name" })
+      return res
+        .status(409)
+        .json({ message: "Already have a game with this name" });
     }
     const game = await createGame(req.body);
     res.status(201).json(game);
@@ -21,7 +23,7 @@ const postGame = async (req, res) => {
 
 const getGames = async (req, res) => {
   try {
-    const { name, order, offset, limit, desc } = req?.query
+    const { name, order, offset, limit, desc } = req?.query;
     const games = await findGames({ name, order, offset, limit, desc });
     res.status(200).json(games);
   } catch (error) {

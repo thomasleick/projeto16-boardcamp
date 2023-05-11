@@ -91,7 +91,7 @@ const returnRentalWithId = async (id, returnDate, delayFee) => {
 const deleteRentalWithId = async (id) => {
   const client = await getClient();
   try {
-    await client.query('DELETE FROM rentals WHERE id=$1', [id]);
+    await client.query("DELETE FROM rentals WHERE id=$1", [id]);
   } catch (err) {
     console.error("Error deleting rental", err);
     throw err;
