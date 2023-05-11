@@ -117,8 +117,6 @@ const buildQuery = (tableName, params) => {
     i++;
   }
 
-  console.log(query)
-  console.log(values)
   return {
     query,
     values,
