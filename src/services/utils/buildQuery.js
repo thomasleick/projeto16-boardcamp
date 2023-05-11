@@ -35,7 +35,7 @@ const buildQuery = (tableName, params) => {
     }
   
     if (order) {
-      query += ` ORDER BY ${order}`;
+      query += ` ORDER BY "${order}"`;
       if (desc === 'true') {
         query += ` DESC`;
       }
