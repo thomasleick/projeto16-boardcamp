@@ -3,7 +3,7 @@ const buildQuery = (tableName, params) => {
     let query = `SELECT * FROM ${tableName}`;
     
     if (tableName === "customers") {
-      query = `SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`;
+      query = `SELECT id, name, phone, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`;
     }
   
     const values = [];
