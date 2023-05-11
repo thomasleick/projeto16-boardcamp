@@ -23,8 +23,8 @@ const postCustomer = async (req, res) => {
 };
 const getCustomers = async (req, res) => {
   try {
-    const { cpf, order, offset, limit } = req?.query;
-    const customers = await findCustomers({ cpf, order, offset, limit });
+    const { cpf, order, offset, limit, desc } = req?.query;
+    const customers = await findCustomers({ cpf, order, offset, limit, desc });
     res.status(200).json(customers);
   } catch (error) {
     console.error(error);

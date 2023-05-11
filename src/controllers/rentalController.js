@@ -48,13 +48,14 @@ const postRental = async (req, res) => {
 
 const getRentals = async (req, res) => {
   try {
-    const { customerId, gameId, order, offset, limit } = req?.query;
+    const { customerId, gameId, order, offset, limit, desc } = req?.query;
     const rentals = await findRentals({
       customerId,
       gameId,
       order,
       offset,
       limit,
+      desc,
     });
     const rentalsWithGameAndCustomer = await Promise.all(
       rentals.map(async (rental) => {

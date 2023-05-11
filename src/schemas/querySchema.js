@@ -8,6 +8,7 @@ const querySchema = Joi.object({
     cpf: Joi.string().pattern(/^\d+$/),
     customerId: Joi.string().pattern(/^\d+$/),
     gameId: Joi.string().pattern(/^\d+$/),
+    desc: Joi.string().valid('true', 'false').optional(),
   });
 
 module.exports = querySchema;
