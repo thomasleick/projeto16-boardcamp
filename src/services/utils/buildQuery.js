@@ -1,6 +1,8 @@
 const buildQuery = (tableName, params) => {
   const { name, cpf, customerId, gameId, offset, limit, order } = params;
   let query = `SELECT * FROM ${tableName}`;
+  if (tableName === "customers")
+   query = `SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`
   const values = [];
   let i = 1;
 
