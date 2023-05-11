@@ -95,8 +95,6 @@ const buildQuery = (tableName, params) => {
     values.push(parseInt(limit, 10));
     i++;
   }
-  console.log(query);
-  console.log(values);
 
   return {
     query,
