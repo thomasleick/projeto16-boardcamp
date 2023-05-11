@@ -26,7 +26,7 @@ const buildQuery = (tableName, params) => {
         rentals."daysRented",
         COALESCE(TO_CHAR(rentals."returnDate", 'YYYY-MM-DD'), '') AS "returnDate",
         rentals."originalPrice",
-        COALESCE(rentals."delayFee", 0) AS "delayFee",
+        rentals."delayFee",
         JSON_BUILD_OBJECT('id', customers.id, 'name', customers.name) AS customer,
         JSON_BUILD_OBJECT('id', games.id, 'name', games.name) AS game
       FROM 
