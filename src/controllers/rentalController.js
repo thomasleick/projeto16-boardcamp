@@ -59,29 +59,7 @@ const getRentals = async (req, res) => {
       status,
       startDate,
     });
-    const rentalsWithGameAndCustomer = await Promise.all(
-      rentals.map(async (rental) => {
-        const gameId = rental.gameId;
-        const game = await findGameById(gameId);
-
-        const customerId = rental.customerId;
-        const customer = await findCustomerById(customerId);
-
-        return {
-          id: rental.id,
-          customerId: rental.customerId,
-          gameId: rental.gameId,
-          rentDate: rental.rentDate,
-          daysRented: rental.daysRented,
-          returnDate: rental.returnDate,
-          originalPrice: rental.originalPrice,
-          delayFee: rental.delayFee,
-          customer: { id: customer.id, name: customer.name },
-          game: { id: game.id, name: game.name },
-        };
-      })
-    );
-    res.status(200).json(rentalsWithGameAndCustomer);
+    res.status(200).json(rentals);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

@@ -16,6 +16,27 @@ const buildQuery = (tableName, params) => {
   if (tableName === "customers") {
     query = `SELECT id, name, phone, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`;
   }
+  if (tableName === "rentals") {
+    query = `
+      SELECT 
+        rentals.id,
+        rentals."customerId",
+        rentals."gameId",
+        TO_CHAR(rentals."rentDate", 'YYYY-MM-DD') AS "rentDate",
+        rentals."daysRented",
+        COALESCE(TO_CHAR(rentals."returnDate", 'YYYY-MM-DD'), '') AS "returnDate",
+        rentals."originalPrice",
+        COALESCE(rentals."delayFee"::text, '') AS "delayFee",
+        JSON_BUILD_OBJECT('id', customers.id, 'name', customers.name) AS customer,
+        JSON_BUILD_OBJECT('id', games.id, 'name', games.name) AS game
+      FROM 
+        rentals
+      INNER JOIN 
+        customers ON rentals."customerId" = customers.id
+      INNER JOIN 
+        games ON rentals."gameId" = games.id
+    `;
+  }
 
   const values = [];
   let i = 1;
@@ -96,6 +117,8 @@ const buildQuery = (tableName, params) => {
     i++;
   }
 
+  console.log(query)
+  console.log(values)
   return {
     query,
     values,
