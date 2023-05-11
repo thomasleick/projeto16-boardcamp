@@ -44,14 +44,12 @@ const buildQuery = (tableName, params) => {
     if (!hasWhere) {
       query += " WHERE";
       hasWhere = true;
-    }
-    else {
-      query += ` AND`
+    } else {
+      query += ` AND`;
     }
     query += ` "gameId" = $${i}`;
     values.push(parseInt(gameId, 10));
     i++;
-    
   }
 
   if (order) {
@@ -67,15 +65,13 @@ const buildQuery = (tableName, params) => {
       hasWhere = true;
     }
     query += ` "returnDate" IS NULL`;
-
   }
   if (status === "closed") {
     if (!hasWhere) {
       query += " WHERE";
       hasWhere = true;
-    }
-    else {
-      query += ` AND`
+    } else {
+      query += ` AND`;
     }
     query += ` "returnDate" IS NOT NULL`;
   }
@@ -83,11 +79,10 @@ const buildQuery = (tableName, params) => {
     if (!hasWhere) {
       query += " WHERE";
       hasWhere = true;
+    } else {
+      query += ` AND`;
     }
-    else {
-      query += ` AND`
-    }
-    query += ` "rentDate"::date >= '${startDate}'`
+    query += ` "rentDate"::date >= '${startDate}'`;
   }
   if (offset) {
     query += ` OFFSET $${i}`;
