@@ -17,8 +17,7 @@ const buildQuery = (tableName, params) => {
     query = `SELECT id, name, phone, cpf, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`;
   }
   if (tableName === "rentals") {
-    query = `
-      SELECT 
+    query = `SELECT 
         rentals.id,
         rentals."customerId",
         rentals."gameId",
@@ -37,7 +36,6 @@ const buildQuery = (tableName, params) => {
         games ON rentals."gameId" = games.id
     `;
   }
-
   const values = [];
   let i = 1;
   let hasWhere = false;
